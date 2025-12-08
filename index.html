@@ -41,7 +41,7 @@
 
 	<a class="view-cart-button" onclick="document.getElementById('cart').classList.add('open');">
 		<img src="shopping-cart.svg" />
-		<span class="cart-counter">0</span>
+		<span id="cart-count">0</span>
 	</a>
 	<div id="cart">
 		<div class="cart-container">
@@ -54,7 +54,7 @@
 				<i>Each Quantity is 1 dozen (12 count).</i>
 				<a class="checkout-button" onclick="goToCheckout()">
 					<img src="cash-register.svg" />
-					<span class="cart-counter">0</span>
+					<span id="total-count">0</span>
 				</a>
 			</div>
 		</div>
@@ -93,18 +93,31 @@
 				let productDiv = document.createElement('div');
   				productDiv.textContent = item.product;
 
-				let qtyDiv = document.createElement('div');
-  				qtyDiv.textContent = item.qty;
+				let qtyInput = document.createElement('input');
+				qtyInput.name = 'quantity';
+  				qtyInput.type = 'number';
+				qtyInput.min = 0;
+				qtyInput.value = item.qty;
 
 				let priceDiv = document.createElement('div');
   				priceDiv.textContent = '$' + item.price;
 
-				itemContainer.append(productDiv, qtyDiv, priceDiv);
+				itemContainer.append(productDiv, qtyInput, priceDiv);
 				document.getElementById('cart-items').appendChild(itemContainer);
 			});
-			document.querySelectorAll('.cart-counter').forEach(ele => {
-				ele.textContent = cart.length;
+
+			/* counters */
+			let totalQty = 0;
+			cart.forEach(item => {
+				totalQty += item.qty;
 			});
+			document.getElementById('cart-count').innerHTML = totalQty;
+
+			let totalPrice = 0;
+			cart.forEach(item => {
+				totalPrice += item.qty * item.price;
+			});
+			document.getElementById('total-count').innerHTML = totalPrice;
 		}
 
 		// When ready to checkout, build the URL
