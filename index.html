@@ -33,9 +33,9 @@
 	<div>
 		<div>Method 3: add-to-cart/checkout using custom JavaScript (bottom right corner cart icon)<br>Limitation - JavaScript may not work on some devices/browsers (introduces points of failure). If that is the case then that particular user would need to email you to make an order.</div>
 		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
-			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1)">Add Regular</a>
-			<a class="buy-button" onclick="addToCart(47413946712202, 'THE AFTER SCHOOL (Gluten-free)', 1)">Add Gluten-free</a>
-			<a class="buy-button" onclick="addToCart(47413946744970, 'THE AFTER SCHOOL (Vegan)', 1)">Add Vegan</a>
+			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
+			<a class="buy-button" onclick="addToCart(47413946712202, 'THE AFTER SCHOOL (Gluten-free)', 1, 35)">Add Gluten-free</a>
+			<a class="buy-button" onclick="addToCart(47413946744970, 'THE AFTER SCHOOL (Vegan)', 1, 35)">Add Vegan</a>
 		</div>
 	</div>
 
@@ -51,9 +51,7 @@
 				<div id="cart-items">Your cart is empty.</div>
 			</div>
 			<div class="checkout-container">
-				<i>
-					Each Quantity is 1 dozen (12 count).
-				</i>
+				<i>Each Quantity is 1 dozen (12 count).</i>
 				<a class="checkout-button" onclick="goToCheckout()">
 					<img src="cash-register.svg" />
 					<span class="cart-counter">0</span>
@@ -76,15 +74,33 @@
 		const cart = [];
 
 		// Add to cart function
-		function addToCart(variantId, product, quantity) {
+		function addToCart(variantId, product, quantity, price) {
 			//document.getElementById('cart').classList.add('open');
 			document.getElementById('cart-items').innerHTML = '';
 
-			cart.push({id: variantId, product: product, qty: quantity});
-			cart.map(item => {
-				let div = document.createElement('div');
-				div.textContent = `${item.product} x ${item.qty}`;
-				document.getElementById('cart-items').appendChild(div);
+			let existingItemIndex = cart.indexOf(cart.find(item => item.id === variantId));
+			if (existingItemIndex !== -1) {
+				cart[existingItemIndex].qty += quantity;
+				cart[existingItemIndex].price += price;
+			} else {
+				cart.push({id: variantId, product: product, qty: quantity, price: price});
+			}
+
+			cart.forEach(item => {
+				let itemContainer = document.createElement('div');
+				itemContainer.className = 'flex-list';
+
+				let productDiv = document.createElement('div');
+  				productDiv.textContent = item.product;
+
+				let qtyDiv = document.createElement('div');
+  				qtyDiv.textContent = item.qty;
+
+				let priceDiv = document.createElement('div');
+  				priceDiv.textContent = '$' + item.price;
+
+				itemContainer.append(productDiv, qtyDiv, priceDiv);
+				document.getElementById('cart-items').appendChild(itemContainer);
 			});
 			document.querySelectorAll('.cart-counter').forEach(ele => {
 				ele.textContent = cart.length;

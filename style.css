@@ -11,6 +11,7 @@ body {
         text-decoration: none;
         border-radius: 5px;
         display: inline-block;
+        cursor: pointer;
     }
 
     .view-cart-button, .checkout-button {
@@ -42,7 +43,7 @@ body {
     }
 
     #cart {
-        width: 30vw;
+        width: 40vw;
         display: flex;
         position: fixed;
         top: 0;
@@ -55,6 +56,9 @@ body {
 
         @media only screen and (max-width: 768px) {
             width: 50vw;
+        }
+        @media only screen and (max-width: 480px) {
+            width: 100vw;
         }
 
         &.open {
@@ -80,6 +84,19 @@ body {
             .your-cart {
                 margin-top: 0;
                 text-align: center;
+            }
+
+            .flex-list {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+
+                > div:first-child {
+                    flex-basis: 80%;
+                }
+                > div:not(:first-child) {
+                    flex-basis: 10%;
+                }
             }
 
             .checkout-container {
