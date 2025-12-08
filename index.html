@@ -73,15 +73,23 @@
 		// Array to store cart items
 		const cart = [];
 
+		function calculate() {
+			let totalPrice = 0;
+			cart.forEach(item => {
+				document.getElementById(item.id + `-price`).innerHTML = '$' + item.qty * item.price;
+				totalPrice += item.qty * item.price;
+			});
+			document.getElementById('total-count').innerHTML = totalPrice;
+		}
+
 		// Add to cart function
 		function addToCart(variantId, product, quantity, price) {
-			//document.getElementById('cart').classList.add('open');
+			document.getElementById('cart').classList.add('open');
 			document.getElementById('cart-items').innerHTML = '';
 
 			let existingItemIndex = cart.indexOf(cart.find(item => item.id === variantId));
 			if (existingItemIndex !== -1) {
 				cart[existingItemIndex].qty += quantity;
-				cart[existingItemIndex].price += price;
 			} else {
 				cart.push({id: variantId, product: product, qty: quantity, price: price});
 			}
@@ -98,26 +106,31 @@
   				qtyInput.type = 'number';
 				qtyInput.min = 0;
 				qtyInput.value = item.qty;
+				qtyInput.addEventListener('input', (e) => {
+					let newQty = parseInt(e.target.value, 10);
+					if (isNaN(newQty) || newQty < 0) {
+						newQty = 0;
+					}
+					item.qty = newQty;
+
+					calculate();
+				});
 
 				let priceDiv = document.createElement('div');
+				priceDiv.id = item.id + `-price`;
   				priceDiv.textContent = '$' + item.price;
 
 				itemContainer.append(productDiv, qtyInput, priceDiv);
 				document.getElementById('cart-items').appendChild(itemContainer);
 			});
 
-			/* counters */
 			let totalQty = 0;
 			cart.forEach(item => {
 				totalQty += item.qty;
 			});
 			document.getElementById('cart-count').innerHTML = totalQty;
 
-			let totalPrice = 0;
-			cart.forEach(item => {
-				totalPrice += item.qty * item.price;
-			});
-			document.getElementById('total-count').innerHTML = totalPrice;
+			calculate();
 		}
 
 		// When ready to checkout, build the URL
