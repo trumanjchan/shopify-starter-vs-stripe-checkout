@@ -1,54 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Shopify Starter Plan $5/mo</title>
-  <link rel="stylesheet" href="style.css" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Shopify Starter Plan $5/mo</title>
+	<link rel="stylesheet" href="style.css" />
 </head>
 
-<body class="spacing">
-	<div>
-		<div>Method 1: direct checkout for each item.<br>Limitation - can't add multiple items to cart, then checkout.</div>
-		<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413960147082:1">Buy Regular</a>
-		<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413946712202:1">Buy Gluten-free</a>
+<body>
+	<div style="border: 1px solid black; padding: 5px;">
+		<div>Please log into the Shopify Store first before trying out each method.</div>
+		<a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a>
+		<div style="margin-left: 20px;">password: <i>dev-truman</i></div>
 	</div>
 
 	<div>
-		<div>Method 2: multiple items in the cart<br>Limitation - only if the user manually navigates back to add every time</div>
-		<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413960147082&quantity=1">Add Regular to cart</a>
-		<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413946712202&quantity=1">Add Gluten-free to cart</a>
-	</div>
-
-	<div>
-		<div>Method 3: add-to-cart using JavaScript - hardcode in Variant IDs for items<br>Limitation - JavaScript may not work on some devices/browsers (introduces points of failure). If that is the case then that particular user would need to email you to make an order.</div>
-		<div class="flex">
-			<button onclick="addToCart(47413960147082, 1)">Add Regular</button>
-			<button onclick="addToCart(47413946712202, 1)">Add Gluten-free</button>
-			<button onclick="addToCart(47413946744970, 1)">Add Vegan</button>
-			<a onclick="goToCheckout()">
-				<img src="shopping-cart.svg" />
-				<span id="cart-counter">0</span>
-			</a>
+		<div>Method 1: direct checkout for each item<br>Limitation - can't add multiple items to cart, then checkout.</div>
+		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
+			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413960147082:1">Buy Regular</a>
+			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413946712202:1">Buy Gluten-free</a>
 		</div>
-		<div>Findings:<br>Shopify's cart is not able to be in sync with the counter. Shopify's cart persists in cookies, so if the user deletes everything in their cart and navigates back to the website then the counter doesn't reflect the actual cart. A solution is to remove the counter.</div>
 	</div>
 
 	<div>
-		Separate Notes:
-		<ul>
+		<div>Method 2: multiple items in the cart<br>Limitation - only if the user manually navigates back to add every time.</div>
+		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
+			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413960147082&quantity=1">Add Regular to cart</a>
+			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413946712202&quantity=1">Add Gluten-free to cart</a>
+		</div>
+	</div>
+
+	<div>
+		<div>Method 3: add-to-cart/checkout using custom JavaScript (bottom right corner cart icon)<br>Limitation - JavaScript may not work on some devices/browsers (introduces points of failure). If that is the case then that particular user would need to email you to make an order.</div>
+		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
+			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1)">Add Regular</a>
+			<a class="buy-button" onclick="addToCart(47413946712202, 'THE AFTER SCHOOL (Gluten-free)', 1)">Add Gluten-free</a>
+			<a class="buy-button" onclick="addToCart(47413946744970, 'THE AFTER SCHOOL (Vegan)', 1)">Add Vegan</a>
+		</div>
+	</div>
+
+	<a class="view-cart-button" onclick="document.getElementById('cart').classList.add('open');">
+		<img src="shopping-cart.svg" />
+		<span class="cart-counter">0</span>
+	</a>
+	<div id="cart">
+		<div class="cart-container">
+			<div>
+				<div class="close-out-button" onclick="document.getElementById('cart').classList.remove('open');">&times;</div>
+				<h3 class="your-cart">Your Cart</h3>
+				<div id="cart-items">Your cart is empty.</div>
+			</div>
+			<div class="checkout-container">
+				<i>
+					Each Quantity is 1 dozen (12 count).
+				</i>
+				<a class="checkout-button" onclick="goToCheckout()">
+					<img src="cash-register.svg" />
+					<span class="cart-counter">0</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		Notes:
+		<ul style="margin: 0;">
 			<li>Creation of a Variant gives it a pre-determined ID. Recommendation is to never delete, but to only edit Variants (price, image).</li>
-			<li>Starter Plan doesn't give you a website, only checkout links and checkout buttons</li>
-			<li><a href="https://catherinecookies.myshopify.com/" target="_blank">catherinecookies.myshopify.com</a><br>password: <i>dev-truman</i></li>
+			<li>Starter Plan doesn't give you a website, only checkout links and checkout buttons.</li>
+			<li>Shopify's cart is not able to be in sync with the counter. Shopify's cart data persists in cookies, so if the user deletes everything in their cart and navigates back to the website then the counter doesn't reflect the actual cart.</li>
+		</ul>
 	</div>
 
 	<script>
 		// Array to store cart items
-		let cart = [];
+		const cart = [];
 
 		// Add to cart function
-		function addToCart(variantId, quantity) {
-			cart.push({id: variantId, qty: quantity});
-			document.getElementById('cart-counter').textContent = cart.length;
+		function addToCart(variantId, product, quantity) {
+			//document.getElementById('cart').classList.add('open');
+			document.getElementById('cart-items').innerHTML = '';
+
+			cart.push({id: variantId, product: product, qty: quantity});
+			cart.map(item => {
+				let div = document.createElement('div');
+				div.textContent = `${item.product} x ${item.qty}`;
+				document.getElementById('cart-items').appendChild(div);
+			});
+			document.querySelectorAll('.cart-counter').forEach(ele => {
+				ele.textContent = cart.length;
+			});
 		}
 
 		// When ready to checkout, build the URL

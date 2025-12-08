@@ -1,4 +1,5 @@
-.spacing {
+body {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 50px;
@@ -12,28 +13,80 @@
         display: inline-block;
     }
 
-    .flex {
+    .view-cart-button, .checkout-button {
+        transition: filter 0.3s ease;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 5px 20px;
+
+        &:hover {
+            cursor: pointer;
+            filter: invert(0.5);
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .cart-counter {
+            vertical-align: middle;
+        }
+    }
+
+    .view-cart-button {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 10px;
+        align-self: center;
+    }
+
+    #cart {
+        width: 30vw;
         display: flex;
-        flex-direction: row;
-        gap: 10px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #f6d4a5;
+        border-left: 1px solid #b05600;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
 
-        a {
-            transition: filter 0.3s ease;
-            border: 1px solid black;
-            border-radius: 10px;
-            padding: 5px 20px;
+        @media only screen and (max-width: 768px) {
+            width: 50vw;
+        }
 
-            &:hover {
+        &.open {
+            transform: translateX(0);
+        }
+
+        .cart-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px;
+
+            .close-out-button {
+                font-size: 60px;
+                width: fit-content;
+                margin-left: auto;
+                line-height: 1;
                 cursor: pointer;
-                filter: invert(0.5);
             }
 
-            img {
-                vertical-align: middle;
+            .your-cart {
+                margin-top: 0;
+                text-align: center;
             }
 
-            #cart-counter {
-                vertical-align: middle;
+            .checkout-container {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
             }
         }
     }
