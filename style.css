@@ -75,6 +75,7 @@ body {
             justify-content: space-between;
             gap: 10px;
             padding: 10px;
+            overflow-y: auto;
 
             .close-out-button {
                 font-size: 60px;
@@ -86,25 +87,35 @@ body {
 
             .your-cart {
                 margin-top: 0;
+                margin-bottom: 20px;
                 text-align: center;
             }
 
-            .flex-list {
+            #cart-items {
                 display: flex;
-                flex-direction: row;
-                gap: 10px;
+                flex-direction: column;
+                gap: 15px;
 
-                > div:first-child {
-                    flex-basis: 80%;
-                }
-                > input {
-                    text-align: center;
-                    flex-basis: 10%;
-                    flex-shrink: 1;
-                    min-width: 0;
-                }
-                > div:last-child {
-                    flex-basis: 10%;
+                .item-row {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 10px;
+
+                    > div:first-child {
+                        flex-basis: 80%;
+                    }
+
+                    > input {
+                        text-align: center;
+                        flex-basis: 10%;
+                        flex-shrink: 1;
+                        min-width: 0;
+                    }
+
+                    > div:last-child {
+                        flex-basis: 10%;
+                        min-width: 40px;
+                    }
                 }
             }
 

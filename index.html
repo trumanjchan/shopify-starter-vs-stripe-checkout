@@ -51,7 +51,7 @@
 				<div id="cart-items">Your cart is empty.</div>
 			</div>
 			<div class="checkout-container">
-				<i>Each Quantity is 1 dozen (12 count).</i>
+				<i>Each Quantity is 1 dozen (12 count), unless&nbsp;otherwise&nbsp;stated.</i>
 				<a class="checkout-button" onclick="goToCheckout()">
 					<img src="cash-register.svg" />
 					<span id="total-count">0</span>
@@ -74,11 +74,14 @@
 		const cart = [];
 
 		function calculate() {
+			let totalQty = 0;
 			let totalPrice = 0;
 			cart.forEach(item => {
 				document.getElementById(item.id + `-price`).innerHTML = '$' + item.qty * item.price;
+				totalQty += item.qty;
 				totalPrice += item.qty * item.price;
 			});
+			document.getElementById('cart-count').innerHTML = totalQty;
 			document.getElementById('total-count').innerHTML = totalPrice;
 		}
 
@@ -96,7 +99,7 @@
 
 			cart.forEach(item => {
 				let itemContainer = document.createElement('div');
-				itemContainer.className = 'flex-list';
+				itemContainer.className = 'item-row';
 
 				let productDiv = document.createElement('div');
   				productDiv.textContent = item.product;
@@ -123,12 +126,6 @@
 				itemContainer.append(productDiv, qtyInput, priceDiv);
 				document.getElementById('cart-items').appendChild(itemContainer);
 			});
-
-			let totalQty = 0;
-			cart.forEach(item => {
-				totalQty += item.qty;
-			});
-			document.getElementById('cart-count').innerHTML = totalQty;
 
 			calculate();
 		}
