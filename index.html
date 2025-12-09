@@ -3,39 +3,44 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Shopify Starter Plan $5/mo</title>
+	<title>Shopify Starter/Stripe Checkout</title>
 	<link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-	<div style="border: 1px solid black; padding: 5px;">
-		<div>Please log into the Shopify Store first before trying out each method.</div>
-		<a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a>
+	<div style="border: 1px solid black; padding: 10px;">
+		<div style="margin-bottom: 10px;"><strong>Shopify Starter Plan</strong>: checkout link<br>$5/mo + ((5% + $0.3) per transaction)</div>
+		<div><a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a> - Store log in not needed in production</div>
 		<div style="margin-left: 20px;">password: <i>dev-truman</i></div>
-	</div>
-
-	<div>
-		<div>Method 1: direct checkout for each item<br>Limitation - can't add multiple items to cart, then checkout.</div>
-		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
-			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413960147082:1">Buy Regular</a>
-			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/47413946712202:1">Buy Gluten-free</a>
-		</div>
-	</div>
-
-	<div>
-		<div>Method 2: multiple items in the cart<br>Limitation - only if the user manually navigates back to add every time.</div>
-		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
-			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413960147082&quantity=1">Add Regular to cart</a>
-			<a class="buy-button" href="https://catherinecookies.myshopify.com/cart/add?id=47413946712202&quantity=1">Add Gluten-free to cart</a>
-		</div>
-	</div>
-
-	<div>
-		<div>Method 3: add-to-cart/checkout using custom JavaScript (bottom right corner cart icon)<br>Limitation - JavaScript may not work on some devices/browsers (introduces points of failure). If that is the case then that particular user would need to email you to make an order.</div>
-		<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
+		<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin: 10px 0; gap: 10px;">
 			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
 			<a class="buy-button" onclick="addToCart(47413946712202, 'THE AFTER SCHOOL (Gluten-free)', 1, 35)">Add Gluten-free</a>
 			<a class="buy-button" onclick="addToCart(47413946744970, 'THE AFTER SCHOOL (Vegan)', 1, 35)">Add Vegan</a>
+		</div>
+		<div>
+			Notes:
+			<ul style="margin: 0;">
+				<li>Creation of a Variant gives it a pre-determined ID. Recommendation is to never delete, but to only edit Variants (price, image).</li>
+				<li>Starter Plan doesn't give you a website, only checkout links and checkout buttons.</li>
+				<li>Shopify's cart is not able to be in sync with the counter. Shopify's cart data persists in cookies, so if the user deletes everything in their cart and navigates back to the website then the counter doesn't reflect the actual cart.</li>
+			</ul>
+		</div>
+	</div>
+
+	<div style="text-align: center;">Shopify cart items and Stripe cart items cannot mix, when checking out. Different data is passed through.</div>
+
+	<div style="border: 1px solid black; padding: 10px;">
+		<div style="margin-bottom: 10px;"><strong>Stripe Checkout</strong>: server-side object using Stripe API<br>(2.9% + $0.3) per transaction</div>
+		<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin: 10px 0; gap: 10px;">
+			<a class="buy-button" onclick="addToCart('price_1ScXlRDDhkyUEhQ65moCXHyb', 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
+			<a class="buy-button" onclick="addToCart('price_1ScXmVDDhkyUEhQ6tCyN46om', 'THE AFTER SCHOOL (Gluten-free)', 1, 35)">Add Gluten-free</a>
+			<a class="buy-button" onclick="addToCart('price_1ScYOzDDhkyUEhQ6fdPxaDi6', 'THE AFTER SCHOOL (Vegan)', 1, 35)">Add Vegan</a>
+		</div>
+		<div>
+			Notes:
+			<ul style="margin: 0;">
+				<li>The Stripe checkout page leads to either success_url page or cancel_url page, which would need to be coded in.</li>
+			</ul>
 		</div>
 	</div>
 
@@ -52,37 +57,35 @@
 			</div>
 			<div class="checkout-container">
 				<i>Each Quantity is 1 dozen (12 count), unless&nbsp;otherwise&nbsp;stated.</i>
-				<a class="checkout-button" onclick="goToCheckout()">
+				<a class="checkout-button" onclick="shopifyCheckout()">
 					<img src="cash-register.svg" />
-					<span id="total-count">0</span>
+					<span class="total-count">0</span>
+					 <span>Shopify Checkout</span>
+				</a>
+				<a class="checkout-button" onclick="stripeCheckout()">
+					<img src="cash-register.svg" />
+					<span class="total-count">0</span>
+					 <span>Stripe Checkout</span>
 				</a>
 			</div>
 		</div>
 	</div>
 
-	<div>
-		Notes:
-		<ul style="margin: 0;">
-			<li>Creation of a Variant gives it a pre-determined ID. Recommendation is to never delete, but to only edit Variants (price, image).</li>
-			<li>Starter Plan doesn't give you a website, only checkout links and checkout buttons.</li>
-			<li>Shopify's cart is not able to be in sync with the counter. Shopify's cart data persists in cookies, so if the user deletes everything in their cart and navigates back to the website then the counter doesn't reflect the actual cart.</li>
-		</ul>
-	</div>
-
 	<script>
-		// Array to store cart items
 		const cart = [];
 
 		function calculate() {
 			let totalQty = 0;
 			let totalPrice = 0;
 			cart.forEach(item => {
-				document.getElementById(item.id + `-price`).innerHTML = '$' + item.qty * item.price;
+				document.getElementById(item.priceId).innerHTML = '$' + item.qty * item.price;
 				totalQty += item.qty;
 				totalPrice += item.qty * item.price;
 			});
 			document.getElementById('cart-count').innerHTML = totalQty;
-			document.getElementById('total-count').innerHTML = totalPrice;
+			document.querySelectorAll('.total-count').forEach(ele => {
+				ele.innerHTML = totalPrice;
+			});
 		}
 
 		// Add to cart function
@@ -90,11 +93,11 @@
 			document.getElementById('cart').classList.add('open');
 			document.getElementById('cart-items').innerHTML = '';
 
-			let existingItemIndex = cart.indexOf(cart.find(item => item.id === variantId));
+			let existingItemIndex = cart.indexOf(cart.find(item => item.priceId === variantId));
 			if (existingItemIndex !== -1) {
 				cart[existingItemIndex].qty += quantity;
 			} else {
-				cart.push({id: variantId, product: product, qty: quantity, price: price});
+				cart.push({priceId: variantId, name: product, qty: quantity, price: price});
 			}
 
 			cart.forEach(item => {
@@ -102,7 +105,7 @@
 				itemContainer.className = 'item-row';
 
 				let productDiv = document.createElement('div');
-  				productDiv.textContent = item.product;
+  				productDiv.textContent = item.name;
 
 				let qtyInput = document.createElement('input');
 				qtyInput.name = 'quantity';
@@ -111,16 +114,30 @@
 				qtyInput.value = item.qty;
 				qtyInput.addEventListener('input', (e) => {
 					let newQty = parseInt(e.target.value, 10);
-					if (isNaN(newQty) || newQty < 0) {
-						newQty = 0;
+					
+					if (e.target.value === "") {
+						item.qty = 0;
+						calculate();
+						return;
 					}
-					item.qty = newQty;
 
+					
+					if (newQty <= 0) {
+						const index = cart.indexOf(item);
+						if (index > -1) cart.splice(index, 1);
+
+						e.target.parentElement.remove();
+
+						calculate();
+						return;
+					}
+
+					item.qty = newQty;
 					calculate();
 				});
 
 				let priceDiv = document.createElement('div');
-				priceDiv.id = item.id + `-price`;
+				priceDiv.id = item.priceId;
   				priceDiv.textContent = '$' + item.price;
 
 				itemContainer.append(productDiv, qtyInput, priceDiv);
@@ -130,10 +147,33 @@
 			calculate();
 		}
 
-		// When ready to checkout, build the URL
-		function goToCheckout() {
-			let cartItems = cart.map(item => `${item.id}:${item.qty}`).join(',');
+		function shopifyCheckout() {
+			let cartItems = cart.map(item => `${item.priceId}:${item.qty}`).join(',');
 			window.location.href = `https://catherinecookies.myshopify.com/cart/${cartItems}`;
+		}
+
+		function stripeCheckout() {
+			for (let i = 0; i < cart.length; i++) {
+				if (cart[i].qty <= 0) {
+					cart.splice(i, 1);
+					i--;
+				}
+			}
+
+			if (cart.length === 0) {
+				document.getElementById('cart-items').innerHTML = 'Your cart is empty.';
+				return;
+			}
+
+			fetch('/create-checkout-session', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ cart }),
+			})
+			.then(res => res.json())
+			.then(data => {
+				window.location.href = data.url;
+			});
 		}
 	</script>
 </body>

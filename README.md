@@ -1,2 +1,2 @@
-# shopify-starter-plan
-exploring the best method of implementing a checkout system
+# Shopify Starter vs. Stripe Checkout
+minimizing cost while maximizing gain

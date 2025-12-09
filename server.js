@@ -1,15 +1,40 @@
+require('dotenv').config();
+const Stripe = require("stripe");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const express = require("express");
 const path = require("path");
 
 const app = express();
 const PORT = 3000;
 
-// Serve static files (HTML, CSS, JS, etc.)
+app.use(express.json());
+
 app.use(express.static(__dirname));
 
-// Serve index.html on root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
+});
+
+app.post("/create-checkout-session", async (req, res) => {
+  const { cart } = req.body;
+
+  const line_items = cart.map(item => ({
+    price: item.priceId,
+    quantity: item.qty,
+  }));
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items,
+      success_url: 'https://yoursite.com/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://yoursite.com/cart',
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {

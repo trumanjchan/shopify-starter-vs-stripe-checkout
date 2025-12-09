@@ -1,5 +1,5 @@
 {
-  "name": "shopify",
+  "name": "shopify-starter-vs-stripe-checkout",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "stripe": "^20.0.0"
   }
 }
