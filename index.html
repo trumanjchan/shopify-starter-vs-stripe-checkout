@@ -8,9 +8,11 @@
 </head>
 
 <body>
+	<div id="overlay" onclick="document.getElementById('cart').classList.remove('open'); document.getElementById('overlay').style.visibility = 'hidden';"></div>
+
 	<div style="border: 1px solid black; padding: 10px;">
 		<div style="margin-bottom: 10px;"><strong>Shopify Starter Plan</strong>: checkout link<br>$5/mo + ((5% + $0.3) per transaction)</div>
-		<div><a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a> - Store log in not needed in production</div>
+		<a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a>
 		<div style="margin-left: 20px;">password: <i>dev-truman</i></div>
 		<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin: 10px 0; gap: 10px;">
 			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
@@ -44,14 +46,14 @@
 		</div>
 	</div>
 
-	<a class="view-cart-button" onclick="document.getElementById('cart').classList.add('open');">
+	<a class="view-cart-button" onclick="document.getElementById('cart').classList.add('open'); document.getElementById('overlay').style.visibility = 'visible';">
 		<img src="shopping-cart.svg" />
 		<span id="cart-count">0</span>
 	</a>
 	<div id="cart">
 		<div class="cart-container">
 			<div>
-				<div class="close-out-button" onclick="document.getElementById('cart').classList.remove('open');">&times;</div>
+				<div class="close-out-button" onclick="document.getElementById('cart').classList.remove('open'); document.getElementById('overlay').style.visibility = 'hidden';">&times;</div>
 				<h3 class="your-cart">Your Cart</h3>
 				<div id="cart-items">Your cart is empty.</div>
 			</div>
@@ -88,9 +90,9 @@
 			});
 		}
 
-		// Add to cart function
 		function addToCart(variantId, product, quantity, price) {
-			document.getElementById('cart').classList.add('open');
+			//document.getElementById('cart').classList.add('open');
+			//document.getElementById('overlay').style.visibility = 'visible';
 			document.getElementById('cart-items').innerHTML = '';
 
 			let existingItemIndex = cart.indexOf(cart.find(item => item.priceId === variantId));
