@@ -3,17 +3,19 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Shopify Starter/Stripe Checkout</title>
-	<link rel="stylesheet" href="style.css" />
+	<title>Shopify Starter vs. Stripe Checkout</title>
+	<link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
 	<div id="overlay" onclick="document.getElementById('cart').classList.remove('open'); document.getElementById('overlay').style.visibility = 'hidden';"></div>
 
 	<div style="border: 1px solid black; padding: 10px;">
-		<div style="margin-bottom: 10px;"><strong>Shopify Starter Plan</strong>: checkout link<br>$5/mo + ((5% + $0.3) per transaction)</div>
+		<div>Log into the Shopify Store first, then close the window, before testing Shopify items.</div>
 		<a href="https://catherinecookies.myshopify.com/" target="_blank" style="margin-left: 20px;">catherinecookies.myshopify.com</a>
 		<div style="margin-left: 20px;">password: <i>dev-truman</i></div>
+
+		<div style="margin: 10px 0;"><strong>Shopify Starter</strong>: checkout link via Shopify Payments<br>$5/mo + (5% per transaction via credit card)</div>
 		<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin: 10px 0; gap: 10px;">
 			<a class="buy-button" onclick="addToCart(47413960147082, 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
 			<a class="buy-button" onclick="addToCart(47413946712202, 'THE AFTER SCHOOL (Gluten-free)', 1, 35)">Add Gluten-free</a>
@@ -23,7 +25,7 @@
 			Notes:
 			<ul style="margin: 0;">
 				<li>Creation of a Variant gives it a pre-determined ID. Recommendation is to never delete, but to only edit Variants (price, image).</li>
-				<li>Starter Plan doesn't give you a website, only checkout links and checkout buttons.</li>
+				<li>Starter plan doesn't give you a website, only checkout links and checkout buttons.</li>
 				<li>Shopify's cart is not able to be in sync with the counter. Shopify's cart data persists in cookies, so if the user deletes everything in their cart and navigates back to the website then the counter doesn't reflect the actual cart.</li>
 			</ul>
 		</div>
@@ -32,7 +34,7 @@
 	<div style="text-align: center;">Shopify cart items and Stripe cart items cannot mix, when checking out. Different data is passed through.</div>
 
 	<div style="border: 1px solid black; padding: 10px;">
-		<div style="margin-bottom: 10px;"><strong>Stripe Checkout</strong>: server-side object using Stripe API<br>(2.9% + $0.3) per transaction</div>
+		<div style="margin-bottom: 10px;"><strong>Stripe Checkout</strong>: server-side object (Checkout Session) via Stripe API<br>$0/mo + (2.9% + $0.3 per transaction via credit card)</div>
 		<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin: 10px 0; gap: 10px;">
 			<a class="buy-button" onclick="addToCart('price_1ScXlRDDhkyUEhQ65moCXHyb', 'THE AFTER SCHOOL (Regular)', 1, 30)">Add Regular</a>
 			<a class="buy-button" onclick="addToCart('price_1ScXmVDDhkyUEhQ6tCyN46om', 'THE AFTER SCHOOL (Gluten-free)', 1, 35)">Add Gluten-free</a>
@@ -47,7 +49,7 @@
 	</div>
 
 	<a class="view-cart-button" onclick="document.getElementById('cart').classList.add('open'); document.getElementById('overlay').style.visibility = 'visible';">
-		<img src="shopping-cart.svg" />
+		<img src="/images/shopping-cart.svg" alt="Cart" />
 		<span id="cart-count">0</span>
 	</a>
 	<div id="cart">
@@ -60,12 +62,12 @@
 			<div class="checkout-container">
 				<i>Each Quantity is 1 dozen (12 count), unless&nbsp;otherwise&nbsp;stated.</i>
 				<a class="checkout-button" onclick="shopifyCheckout()">
-					<img src="cash-register.svg" />
+					<img src="/images/cash-register.svg" alt="Shopify checkout" />
 					<span class="total-count">0</span>
 					 <span>Shopify Checkout</span>
 				</a>
 				<a class="checkout-button" onclick="stripeCheckout()">
-					<img src="cash-register.svg" />
+					<img src="/images/cash-register.svg" alt="Stripe checkout" />
 					<span class="total-count">0</span>
 					 <span>Stripe Checkout</span>
 				</a>
